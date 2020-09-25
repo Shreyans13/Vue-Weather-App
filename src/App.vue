@@ -37,13 +37,16 @@ export default {
     }
   },
   methods: {
-    fetchWeather (e) {
-      if (e.key == "Enter") {
-        fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`)
+    fetchData() {
+      fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`)
         .then(res => {
           return res.json();
         })
         .then(this.setResults);
+    },
+    fetchWeather (e) {
+      if (e.key == "Enter") {
+        this.fetchData();
       }
     },
     setResults (results) {
@@ -58,8 +61,26 @@ export default {
       let month = months[d.getMonth()];
       let year = d.getFullYear();
       return `${day} ${date} ${month} ${year}`;
+    },
+    getUserLocation() {
+      if(navigator.geolocation){
+          navigator.geolocation.getCurrentPosition(position =>{
+              fetch(`${this.url_base}weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=${this.api_key}`)
+              .then(res => {
+                return res.json();
+              })
+              .then(this.setResults);
+          })
+      }
+      else{
+          alert("Ops! Something went wrong try reloding the page.")
+      }
     }
-  }
+  },
+  created() {
+    this.getUserLocation();
+		// this.fetchData();
+	},
 }
 </script>
 
