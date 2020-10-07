@@ -1,5 +1,6 @@
 # vue-weather
 
+Hosted at https://shreyans13.github.io/Vue-Weather-App/
 ## Project setup
 ```
 npm install
